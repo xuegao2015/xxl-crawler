@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -20,9 +21,10 @@ public class JsoupUtilTest {
 
         /**
      * 加载解析页面
+         * @throws IOException 
      */
     @Test
-    public void loadParseTest(){
+    public void loadParseTest() throws IOException{
         String url = "http://www.baidu.com/";
 
         Document html = JsoupUtil.load(new PageRequest(url, null, null, null,
@@ -32,9 +34,10 @@ public class JsoupUtilTest {
 
     /**
      * 获取页面上所有超链接地址
+     * @throws IOException 
      */
     @Test
-    public void findLinksTest() {
+    public void findLinksTest() throws IOException {
         String url = "http://www.baidu.com/";
 
         Document html = JsoupUtil.load(new PageRequest(url, null, null, null,
@@ -52,9 +55,10 @@ public class JsoupUtilTest {
 
     /**
      * 获取页面上所有图片地址
+     * @throws IOException 
      */
     @Test
-    public void findImagesTest() {
+    public void findImagesTest() throws IOException {
         String url = "http://www.baidu.com/";
 
         Document html = JsoupUtil.load(new PageRequest(url, null, null, null,

@@ -28,54 +28,50 @@ public class JsoupUtil {
      * @param pageRequest
      *
      * @return Document
+     * @throws IOException 
      */
-    public static Document load(PageRequest pageRequest) {
+    public static Document load(PageRequest pageRequest) throws IOException {
         if (!UrlUtil.isUrl(pageRequest.getUrl())) {
             return null;
         }
-        try {
-            // 请求设置
-            Connection conn = Jsoup.connect(pageRequest.getUrl());
-            if (pageRequest.getParamMap() != null && !pageRequest.getParamMap().isEmpty()) {
-                conn.data(pageRequest.getParamMap());
-            }
-            if (pageRequest.getCookieMap() != null && !pageRequest.getCookieMap().isEmpty()) {
-                conn.cookies(pageRequest.getCookieMap());
-            }
-            if (pageRequest.getHeaderMap()!=null && !pageRequest.getHeaderMap().isEmpty()) {
-                conn.headers(pageRequest.getHeaderMap());
-            }
-            if (pageRequest.getUserAgent()!=null) {
-                conn.userAgent(pageRequest.getUserAgent());
-            }
-            if (pageRequest.getReferrer() != null) {
-                conn.referrer(pageRequest.getReferrer());
-            }
-            conn.timeout(pageRequest.getTimeoutMillis());
-            conn.validateTLSCertificates(pageRequest.isValidateTLSCertificates());
-            conn.maxBodySize(0);    // 取消默认1M限制
-
-            // 代理
-            if (pageRequest.getProxy() != null) {
-                conn.proxy(pageRequest.getProxy());
-            }
-
-            // 发出请求
-            Document html = null;
-            if (pageRequest.isIfPost()) {
-                html = conn.post();
-            } else {
-                html = conn.get();
-            }
-            return html;
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-            return null;
+        // 请求设置
+        Connection conn = Jsoup.connect(pageRequest.getUrl());
+        if (pageRequest.getParamMap() != null && !pageRequest.getParamMap().isEmpty()) {
+            conn.data(pageRequest.getParamMap());
         }
+        if (pageRequest.getCookieMap() != null && !pageRequest.getCookieMap().isEmpty()) {
+            conn.cookies(pageRequest.getCookieMap());
+        }
+        if (pageRequest.getHeaderMap()!=null && !pageRequest.getHeaderMap().isEmpty()) {
+            conn.headers(pageRequest.getHeaderMap());
+        }
+        if (pageRequest.getUserAgent()!=null) {
+            conn.userAgent(pageRequest.getUserAgent());
+        }
+        if (pageRequest.getReferrer() != null) {
+            conn.referrer(pageRequest.getReferrer());
+        }
+        conn.timeout(pageRequest.getTimeoutMillis());
+        conn.validateTLSCertificates(pageRequest.isValidateTLSCertificates());
+        conn.maxBodySize(0);    // 取消默认1M限制
+
+        // 代理
+        if (pageRequest.getProxy() != null) {
+            conn.proxy(pageRequest.getProxy());
+        }
+
+        // 发出请求
+        Document html = null;
+        if (pageRequest.isIfPost()) {
+            html = conn.post();
+        } else {
+            html = conn.get();
+        }
+        return html;
     }
 
 
-    public static String loadPageSource(PageRequest pageRequest) {
+    public static String loadPageSource(PageRequest pageRequest) throws Exception {
         if (!UrlUtil.isUrl(pageRequest.getUrl())) {
             return null;
         }
@@ -114,8 +110,7 @@ public class JsoupUtil {
             String pageSource = resp.body();
             return pageSource;
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-            return null;
+            throw e;
         }
     }
 

@@ -15,7 +15,8 @@ public abstract class PageLoader {
      *
      * @param pageRequest
      * @return Document
+     * @throws Exception 
      */
-    public abstract Document load(PageRequest pageRequest);
+    public abstract Document load(PageRequest pageRequest) throws Exception;
 
 }

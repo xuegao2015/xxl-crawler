@@ -16,8 +16,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
         <maven.test.skip>true</maven.test.skip>
 
@@ -82,6 +82,11 @@
             <version>${phantomjs.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+			<groupId>com.xg.framework</groupId>
+			<artifactId>thread-wraper</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 
     </dependencies>
 

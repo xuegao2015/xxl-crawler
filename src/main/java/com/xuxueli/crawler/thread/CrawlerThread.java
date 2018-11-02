@@ -16,6 +16,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -35,9 +36,9 @@ import java.util.concurrent.TimeUnit;
 public class CrawlerThread implements Runnable {
     private static Logger logger = LoggerFactory.getLogger(CrawlerThread.class);
 
-    private XxlCrawler crawler;
-    private boolean running;
-    private boolean toStop;
+    XxlCrawler crawler;
+    boolean running;
+    boolean toStop;
     public CrawlerThread(XxlCrawler crawler) {
         this.crawler = crawler;
         this.running = true;
@@ -118,7 +119,7 @@ public class CrawlerThread implements Runnable {
      * @param link
      * @return PageRequest
      */
-    private PageRequest makePageRequest(String link){
+    PageRequest makePageRequest(String link){
         String userAgent = crawler.getRunConf().getUserAgentList().size()>1
                 ?crawler.getRunConf().getUserAgentList().get(new Random().nextInt(crawler.getRunConf().getUserAgentList().size()))
                 :crawler.getRunConf().getUserAgentList().size()==1?crawler.getRunConf().getUserAgentList().get(0):null;
@@ -146,8 +147,9 @@ public class CrawlerThread implements Runnable {
      * process non page
      * @param pageRequest
      * @return boolean
+     * @throws IOException 
      */
-    private boolean processNonPage(PageRequest pageRequest){
+    boolean processNonPage(PageRequest pageRequest) throws Exception{
         NonPageParser nonPageParser = (NonPageParser) crawler.getRunConf().getPageParser();
 
         String pagesource = JsoupUtil.loadPageSource(pageRequest);
@@ -163,7 +165,7 @@ public class CrawlerThread implements Runnable {
      * @param pageRequest
      * @return boolean
      */
-    private boolean processPage(PageRequest pageRequest) throws IllegalAccessException, InstantiationException {
+    boolean processPage(PageRequest pageRequest) throws Exception {
         Document html = crawler.getRunConf().getPageLoader().load(pageRequest);
 
         if (html == null) {

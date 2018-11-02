@@ -1,5 +1,15 @@
 package com.xuxueli.crawler;
 
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.xuxueli.crawler.loader.PageLoader;
 import com.xuxueli.crawler.model.RunConf;
 import com.xuxueli.crawler.parser.PageParser;
@@ -7,15 +17,6 @@ import com.xuxueli.crawler.proxy.ProxyMaker;
 import com.xuxueli.crawler.rundata.RunData;
 import com.xuxueli.crawler.rundata.strategy.LocalRunData;
 import com.xuxueli.crawler.thread.CrawlerThread;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  *  xxl crawler
@@ -26,14 +27,14 @@ public class XxlCrawler {
     private static Logger logger = LoggerFactory.getLogger(XxlCrawler.class);
 
     // run data
-    private volatile RunData runData = new LocalRunData();                          // 运行时数据模型
+    volatile RunData runData = new LocalRunData();                          // 运行时数据模型
 
     // run conf
-    private volatile RunConf runConf = new RunConf();                               // 运行时配置
+    volatile RunConf runConf = new RunConf();                               // 运行时配置
 
     // thread
-    private int threadCount = 1;                                                    // 爬虫线程数量
-    private ExecutorService crawlers = Executors.newCachedThreadPool();             // 爬虫线程池
+    int threadCount = 1;                                                    // 爬虫线程数量
+    ExecutorService crawlers = Executors.newCachedThreadPool();             // 爬虫线程池
     private List<CrawlerThread> crawlerThreads = new CopyOnWriteArrayList<CrawlerThread>();     // 爬虫线程引用镜像
 
     // ---------------------- get ----------------------
@@ -47,7 +48,7 @@ public class XxlCrawler {
     }
 
     // ---------------------- builder ----------------------
-    public static class Builder {
+    public static class Builder{
         private XxlCrawler crawler = new XxlCrawler();
 
         // run data
